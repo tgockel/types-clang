@@ -20,6 +20,7 @@ def main() -> None:
     env.globals.update({name: getattr(__builtins__, name) for name in dir(__builtins__)})
     env.filters['startswith'] = filter_startswith
     env.filters['not_none'] = filter_not_none
+
     template = env.get_template('cindex.pyi.jinja2')
     print(template.render(cindex=cindex))
 
