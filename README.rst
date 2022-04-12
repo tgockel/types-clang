@@ -1,5 +1,5 @@
 ###########
-clang-stubs
+types-clang
 ###########
 ==========================================
 Type Information for Clang Python Bindings
@@ -21,6 +21,6 @@ to:
 
 To utilize this, add it globally with::
 
-    pip3 install clang-stubs
+    pip3 install types-clang
 
-Or add ``clang-stubs`` to ``dev-requirements.txt`` or ``pyproject.toml`` or whatever you use for dependency management.
+Or add ``types-clang`` to ``dev-requirements.txt`` or ``pyproject.toml`` or whatever you use for dependency management.

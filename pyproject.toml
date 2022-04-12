@@ -1,9 +1,25 @@
 [tool.poetry]
-name = "clang-stubs"
+name = "types-clang"
 version = "0.14.0"
 description = "Stubs package for Clang Python bindings"
 authors = ["Travis Gockel <travis@gockelhut.com>"]
-license = "Apache 2.0"
+license = "Apache-2.0"
+readme = "README.rst"
+homepage = "https://github.com/tgockel/clang-stubs"
+repository = "https://github.com/tgockel/clang-stubs"
+keywords = ["clang", "stubs", "typing"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Software Development :: Compilers",
+    "Typing :: Stubs Only"
+]
+packages = [
+    { include = "clang-stubs", from = "." }
+]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
