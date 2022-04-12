@@ -13,11 +13,11 @@ Clang.
 
 In other words, transform your IDE from:
 
-.. image:: https://raw.githubusercontent.com/tgockel/clang-stubs/trunk/doc/before.png
+.. image:: https://raw.githubusercontent.com/tgockel/types-clang/trunk/doc/before.png
 
 to:
 
-.. image:: https://raw.githubusercontent.com/tgockel/clang-stubs/trunk/doc/after.png
+.. image:: https://raw.githubusercontent.com/tgockel/types-clang/trunk/doc/after.png
 
 To utilize this, add it globally with::
 
