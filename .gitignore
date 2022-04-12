@@ -1,0 +1,9 @@
+*.pyc
+*.pyo
+*~
+*.swp
+*.orig
+build
+.vscode
+*.code-workspace
+__pycache__
