@@ -5,8 +5,8 @@ description = "Stubs package for Clang Python bindings"
 authors = ["Travis Gockel <travis@gockelhut.com>"]
 license = "Apache-2.0"
 readme = "README.rst"
-homepage = "https://github.com/tgockel/clang-stubs"
-repository = "https://github.com/tgockel/clang-stubs"
+homepage = "https://github.com/tgockel/types-clang"
+repository = "https://github.com/tgockel/types-clang"
 keywords = ["clang", "stubs", "typing"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -46,5 +46,5 @@ allowlist_externals = poetry
 commands_pre =
     poetry install -v
 commands =
-    python3 -m mypy.stubtest clang
+    python3 -m mypy.stubtest --allowlist mypy-missing-allowlist.txt clang
 """

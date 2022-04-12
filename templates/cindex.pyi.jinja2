@@ -1,7 +1,20 @@
-from ctypes import Structure
+from ctypes import Structure, pointer, c_void_p, CDLL
 import typing
 
 _T = typing.TypeVar('_T')
+_CObjectPtr = typing.Type[pointer[c_void_p]]
+
+
+class TranslationUnitLoadError(Exception):
+    pass
+
+
+class TranslationUnitSaveError(Exception):
+    ERROR_UNKNOWN: int
+    ERROR_TRANSLATION_ERRORS: int
+    ERROR_INVALID_TU: int
+
+    def __init__(self, enumeration: int, message: str) -> None: ...
 
 
 class SourceLocation(Structure):
@@ -208,6 +221,9 @@ class Cursor(Structure):
     def get_field_offsetof(self) -> int: ...
     def get_bitfield_width(self) -> int: ...
 
+    @staticmethod
+    def from_result(res: 'Cursor', fn: typing.Any, args: typing.Sequence[typing.Any]) -> 'Cursor': ...
+
 
 class StorageClass():
     def __init__(self, value: int) -> None: ...
@@ -296,6 +312,7 @@ class Type(Structure):
 
 class ClangObject():
     def __init__(self, obj: typing.Any) -> None: ...
+    def from_param(self) -> _CObjectPtr: ...
 
 
 SpellingCache: typing.Dict[int, 'CompletionChunk']
@@ -415,9 +432,9 @@ class TranslationUnit(ClangObject):
                      ) -> 'SourceLocation': ...
     def get_extent(self,
                    filename: str,
-                   position: typing.Union[typing.Tuple['SourceLocation', 'SourceLocation'],
-                                          typing.Tuple[int, int],
-                                          typing.Tuple[typing.Tuple[int, int], typing.Tuple[int, int]]]
+                   locations: typing.Union[typing.Tuple['SourceLocation', 'SourceLocation'],
+                                           typing.Tuple[int, int],
+                                           typing.Tuple[typing.Tuple[int, int], typing.Tuple[int, int]]]
                    ) -> 'SourceRange': ...
     @property
     def diagnostics(self) -> typing.Sequence['Diagnostic']: ...
@@ -504,3 +521,22 @@ class Token(Structure):
     def extent(self) -> 'SourceRange': ...
     @property
     def cursor(self) -> 'Cursor': ...
+
+
+class Config():
+    library_path: typing.Optional[str]
+    library_file: typing.Optional[str]
+    compatibility_check: bool
+    loaded: bool
+
+    @staticmethod
+    def set_library_path(path: str) -> None: ...
+    @staticmethod
+    def set_library_file(filename: str) -> None: ...
+    @staticmethod
+    def set_compatibility_check(check_status: bool) -> None: ...
+    @property
+    def lib(self) -> CDLL: ...
+    def get_filename(self) -> str: ...
+    def get_cindex_library(self) -> CDLL: ...
+    def function_exists(self, name: str) -> bool: ...
