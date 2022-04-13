@@ -25,6 +25,28 @@ To utilize this, add it globally with::
 
 Or add ``types-clang`` to ``dev-requirements.txt`` or ``pyproject.toml`` or whatever you use for dependency management.
 
+Versioning
+==========
+
+.. note::
+    This project is still ``0.x``, so this section is more about the *plans* for how to version.
+
+The published ``types-clang`` packages correspond with the type information of the ``{major}.{minor}`` of the ``clang``
+package.
+The patch version of ``types-clang`` does not correspond with any patch version of ``clang``, as they use semantic
+versioning correctly and will not add functionality in a patch release.
+So, if you install ``clang==13.0.1``, then ``types-clang>=13.0, <13.1`` will have the appropriate stubs.
+
+Best practice is to write the version specification for ``types-clang`` to be the same as the ``clang`` package, but
+without the patch.
+For `Poetry <https://python-poetry.org/>`_::
+
+    [tool.poetry.dependencies]
+    clang = "14.0"
+
+    [tool.poetry.dev-dependencies]
+    types-clang = "14.0"
+
 Developing
 ==========
 
