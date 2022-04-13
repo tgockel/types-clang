@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "types-clang"
-version = "0.14.0"
+version = "0.14.1"
 description = "Stubs package for Clang Python bindings"
 authors = ["Travis Gockel <travis@gockelhut.com>"]
 license = "Apache-2.0"
