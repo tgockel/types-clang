@@ -24,3 +24,19 @@ To utilize this, add it globally with::
     pip3 install types-clang
 
 Or add ``types-clang`` to ``dev-requirements.txt`` or ``pyproject.toml`` or whatever you use for dependency management.
+
+Developing
+==========
+
+Development utilizes `Poetry <https://python-poetry.org/>`_ for dependency fetching and package publishing and
+`tox <https://tox.wiki/en/latest/>`_ for testing.
+The ``clang-stubs/cindex.py`` file is generated with the ``generate_cindex.py`` script, which reads the installed
+``clang.cindex`` module and generates code with `Jinja <https://palletsprojects.com/p/jinja/>`_.
+
+My personal workflow looks like this::
+
+    $> poetry shell
+    (env-py3.9) $> poetry install
+    (env-py3.9) $> ./generate_cindex.py --output clang-stubs/cindex.py
+    (env-py3.9) $> ^D
+    $> tox

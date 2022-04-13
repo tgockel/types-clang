@@ -14,7 +14,7 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Software Development :: Compilers",
+    "Topic :: Software Development :: Compilers",
     "Typing :: Stubs Only"
 ]
 packages = [
