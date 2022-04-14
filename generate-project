@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+"""This script generates ``cindex.pyi`` from clang.cindex."""
+
+import argparse
+import os
+import shutil
+import sys
+import typing
+import generate_common
+
+
+class Context(typing.NamedTuple):
+    output: str
+    project_version: str
+    clang_version: str
+
+    @classmethod
+    def from_args(cls) -> 'Context':
+        p = argparse.ArgumentParser()
+        p.add_argument('--output', '-o', type=str, default=None)
+        p.add_argument('--project-version', type=str, default=None)
+        p.add_argument('--clang-version', type=str, required=True)
+
+        args = p.parse_args()
+
+        clang_version = args.clang_version
+
+        return cls(clang_version=clang_version,
+                   project_version = args.project_version or f'0.{clang_version}.2',  # <- FIXME
+                   output = args.output or f'projects/{clang_version}'  # <- FIXME
+                   )
+
+
+def main() -> None:
+    env = generate_common.create_jinja_env('templates')
+
+    context = Context.from_args()
+    os.mkdir(context.output)
+    os.mkdir(f'{context.output}/types-clang')
+    os.mkdir(f'{context.output}/types-clang/clang-stubs')
+
+    with open(f'{context.output}/pyproject.toml', 'w+') as out:
+        template = env.get_template('gen-types-clang/pyproject.toml.jinja2')
+
+        out.write(template.render(version=context.project_version, clang_version=context.clang_version))
+        out.write('\n')
+
+    with open(f'{context.output}/types-clang/pyproject.toml', 'w+') as out:
+        template = env.get_template('types-clang/pyproject.toml.jinja2')
+
+        out.write(template.render(version=context.project_version, clang_version=context.clang_version))
+        out.write('\n')
+
+    with open(f'{context.output}/types-clang/README.rst', 'w+') as out:
+        readme = open('README.rst').read()
+        out.write(readme[:readme.rfind('\nDeveloping\n')])
+
+    shutil.copy('generate-cindex', context.output)
+    shutil.copy('generate_common.py', context.output)
+    shutil.copy('mypy-missing-allowlist.txt', f'{context.output}/types-clang')
+    shutil.copy('clang-stubs/__init__.pyi', f'{context.output}/types-clang/clang-stubs')
+    shutil.copy('clang-stubs/enumerations.pyi', f'{context.output}/types-clang/clang-stubs')
+
+if __name__ == '__main__':
+    sys.exit(main())

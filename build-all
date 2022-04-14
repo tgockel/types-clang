@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -e
+
+CLANG_VERSIONS=(12 13 14)
+
+poetry update
+
+echo "Generating Projects"
+echo "==================="
+for CLANG_VERSION in "${CLANG_VERSIONS[@]}"; do
+  echo " - ${CLANG_VERSION}"
+  rm -rf projects/${CLANG_VERSION}
+  poetry run ./generate-project --clang-version ${CLANG_VERSION}
+done
+
+echo "Generating Stubs from Clang"
+echo "==========================="
+for CLANG_VERSION in "${CLANG_VERSIONS[@]}"; do
+  echo " - ${CLANG_VERSION}"
+  cd "projects/${CLANG_VERSION}"
+  poetry update
+  poetry run ./generate-cindex
+  cd - >/dev/null
+done
+
+echo "Testing"
+echo "======="
+for CLANG_VERSION in "${CLANG_VERSIONS[@]}"; do
+  echo " - ${CLANG_VERSION}"
+  cd "projects/${CLANG_VERSION}/types-clang"
+  poetry update
+  tox
+  cd - >/dev/null
+done

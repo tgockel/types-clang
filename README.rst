@@ -29,7 +29,8 @@ Versioning
 ==========
 
 .. note::
-    This project is still ``0.x``, so this section is more about the *plans* for how to version.
+    This project is still ``0.x``, so add a ``0.`` in front of the descriptions here.
+    In other words, for ``clang`` ``12.0.1``, use ``types-clang`` ``0.12.2``.
 
 The published ``types-clang`` packages correspond with the type information of the ``{major}.{minor}`` of the ``clang``
 package.
@@ -50,15 +51,29 @@ For `Poetry <https://python-poetry.org/>`_::
 Developing
 ==========
 
-Development utilizes `Poetry <https://python-poetry.org/>`_ for dependency fetching and package publishing and
-`tox <https://tox.wiki/en/latest/>`_ for testing.
-The ``clang-stubs/cindex.py`` file is generated with the ``generate_cindex.py`` script, which reads the installed
-``clang.cindex`` module and generates code with `Jinja <https://palletsprojects.com/p/jinja/>`_.
+Development of this project is slightly indirect.
+The root project is named ``gen-gen-types-clang``, which uses file copying and a bit of
+`Jinja <https://palletsprojects.com/p/jinja/>`_ to create a couple of project files based on a version of Clang.
+By default, these live in ``projects/${CLANG_VERSION}``.
+These generated projects are all named ``gen-types-clang``, which contain a script named ``generate-cindex`` that will
+generate ``types-clang/clang-stubs/cindex.pyi`` based on the installed ``clang.cindex`` module.
+Once run, the ``types-clang`` project can be tested with ``tox``.
 
-My personal workflow looks like this::
+You can do all of this by running the ``./build-all`` script at the root of this repository.
 
-    $> poetry shell
-    (env-py3.9) $> poetry install
-    (env-py3.9) $> ./generate_cindex.py --output clang-stubs/cindex.py
-    (env-py3.9) $> ^D
-    $> tox
+This all seems a bit convoluted
+-------------------------------
+
+You are correct.
+
+I want to be able to generate Clang bindings for versions of Clang from the past and be able to fix mistakes in the
+generated stubs.
+I was not able to find a Python project system capable of doing this out-of-the-box.
+
+Another reason this is done is to support older versions of Python.
+Jinja requires Python 3.7 and above, but I needed this project to work with Python 3.6 (even though it is past the end
+of security fixes).
+Since Jinja is only used at generation time, there is no need to restrict the published package to 3.7+.
+
+I thought this was the best approach at the time.
+If there is an easier way to do this, let me know.
