@@ -35,9 +35,8 @@ def main() -> None:
     env = generate_common.create_jinja_env('templates')
 
     context = Context.from_args()
-    os.mkdir(context.output)
-    os.mkdir(f'{context.output}/types-clang')
-    os.mkdir(f'{context.output}/types-clang/clang-stubs')
+    os.makedirs(context.output, exist_ok=True)
+    os.makedirs(f'{context.output}/types-clang/clang-stubs', exist_ok=True)
 
     with open(f'{context.output}/pyproject.toml', 'w+') as out:
         template = env.get_template('gen-types-clang/pyproject.toml.jinja2')
