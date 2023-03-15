@@ -30,6 +30,6 @@ for CLANG_VERSION in "${CLANG_VERSIONS[@]}"; do
   echo " - ${CLANG_VERSION}"
   cd "projects/${CLANG_VERSION}/types-clang"
   poetry update
-  tox
+  poetry run tox
   cd - >/dev/null
 done
