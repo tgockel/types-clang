@@ -26,7 +26,7 @@ class Context(typing.NamedTuple):
         clang_version = args.clang_version
 
         return cls(clang_version=clang_version,
-                   project_version = args.project_version or f'0.{clang_version}.2',  # <- FIXME
+                   project_version = args.project_version or f'0.{clang_version}.3',  # <- FIXME
                    output = args.output or f'projects/{clang_version}'  # <- FIXME
                    )
 
